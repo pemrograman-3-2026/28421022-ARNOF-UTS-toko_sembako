@@ -1,0 +1,22 @@
+{
+  "name": "toko-sembako-arnof-informatika-2024",
+  "version": "1.0.0",
+  "description": "toko sembako by arnof dwi ferdiza 2024 merupakan projek uts pemrograman 3",
+  "license": "ISC",
+  "author": "arnofdwiferdiza",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "prisma": "^7.8.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

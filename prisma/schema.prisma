@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  ADMIN
+  KASIR
+}
+
+model user {
+  id Int @id @default(autoincrement())
+  username String @unique
+  password String
+  role Role @default(KASIR)
+  no_telp String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  transaksi transaksi[]
+
+  @@map("users")
+}
+
+model kategori {
+  id Int @id @default(autoincrement())
+  nama_kategori String
+  deskripsi String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  barang barang[]
+
+  @@map("kategori")
+}
+
+model barang {
+  id Int @id @default(autoincrement())
+  nama_barang String
+  harga Int
+  stok Int
+  kategori_id Int
+  kategori kategori @relation(fields: [kategori_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  detail_transaksi detail_transaksi[]
+
+  @@map("barang")
+}
+
+model transaksi {
+  id Int @id @default(autoincrement())
+  user_id Int
+  user user @relation(fields: [user_id], references: [id])
+  total_harga Int
+  tanggal_transaksi DateTime @default(now())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  detail_transaksi detail_transaksi[]
+
+  @@map("transaksi")
+}
+
+model detail_transaksi {
+  id Int @id @default(autoincrement())
+  transaksi_id Int
+  transaksi transaksi @relation(fields: [transaksi_id], references: [id])
+  barang_id Int
+  barang barang @relation(fields: [barang_id], references: [id])
+  jumlah Int
+  harga_satuan Int
+  subtotal Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("detail_transaksi")
+}
