@@ -16,7 +16,20 @@
     "@prisma/adapter-mariadb": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pemrograman-3-2026/28421022-ARNOF-UTS-toko_sembako.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/pemrograman-3-2026/28421022-ARNOF-UTS-toko_sembako/issues"
+  },
+  "homepage": "https://github.com/pemrograman-3-2026/28421022-ARNOF-UTS-toko_sembako#readme"
 }
