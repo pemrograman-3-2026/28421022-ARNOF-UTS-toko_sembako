@@ -4,6 +4,7 @@ export const getAllTransaksi = async (req, res) => {
     try {
         const transaksi = await prisma.transaksi.findMany({
             include: {
+                pelanggan: true,
                 user: {
                     select: {
                         id: true,
@@ -35,7 +36,7 @@ export const getAllTransaksi = async (req, res) => {
 export const createTransaksi = async (req, res) => {
     try {
         
-        const { user_id, items } = req.body
+       const { user_id, pelanggan_id, items } = req.body
 
         if (!user_id || !items || items.length === 0) {
             return res.status(400).json({ message: 'User ID dan items tidak boleh kosong' })
@@ -79,6 +80,7 @@ export const createTransaksi = async (req, res) => {
             const newTransaksi = await tx.transaksi.create({
                 data: {
                     user_id: parseInt(user_id),
+                    pelanggan_id: pelanggan_id ? parseInt(pelanggan_id) : null,
                     total_harga: total_harga,
                     detail_transaksi: {
                         create: detailTransaksiData

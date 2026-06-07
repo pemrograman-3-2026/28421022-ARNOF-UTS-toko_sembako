@@ -61,6 +61,8 @@ model transaksi {
   user user @relation(fields: [user_id], references: [id])
   total_harga Int
   tanggal_transaksi DateTime @default(now())
+   pelanggan_id Int?
+   pelanggan pelanggan? @relation(fields: [pelanggan_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   detail_transaksi detail_transaksi[]
@@ -81,4 +83,16 @@ model detail_transaksi {
   updated_at DateTime @updatedAt
 
   @@map("detail_transaksi")
+}
+
+model pelanggan {
+  id Int @id @default(autoincrement())
+  nama String
+  no_telp String?
+  alamat String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  transaksi transaksi[]
+
+  @@map("pelanggan")
 }
