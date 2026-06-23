@@ -38,30 +38,36 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const body = req.body
-        const username = body.username
-        const password = body.password
+        console.log("=== DEBUG LOGIN ===");
+        console.log("Data yang diterima (req.body):", req.body);
+
+        const body = req.body;
+        const username = body.username;
+        const password = body.password;
 
         const isusernameexist = await prisma.user.findUnique({
             where: {
                 username: username
             }
-        })
+        });
 
         if (!isusernameexist) {
+            console.log("Status: Username tidak ditemukan di database");
             return res.status(401).json({
                 message: 'Username not found'
-            })
+            });
         }
 
-        const hashPassword = isusernameexist.password
+        const hashPassword = isusernameexist.password;
 
         if (!bcrypt.compareSync(password, hashPassword)) {
+            console.log("Status: Password salah");
             return res.status(401).json({
                 message: 'Password not match'
-            })
+            });
         }
 
+        console.log("Status: Login Berhasil!");
         res.json({
             message: 'User logged in successfully',
             data: {
@@ -70,13 +76,16 @@ export const login = async (req, res) => {
                 role: isusernameexist.role,
                 no_telp: isusernameexist.no_telp
             }
-        })
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in', error: error.message })
+        console.error("!!! SERVER CRASH SAAT LOGIN !!!");
+        console.error("Pesan Error:", error.message);
+        console.error("Detail Error:", error);
+        
+        res.status(500).json({ message: 'Error logging in', error: error.message });
     }
 }
 
-// CRUD Users
 export const getAllUsers = async (req, res) => {
     try {
         const users = await prisma.user.findMany({
@@ -124,7 +133,7 @@ export const deleteUser = async (req, res) => {
         const existingUser = await prisma.user.findUnique({ where: { id } })
         if (!existingUser) return res.status(404).json({ message: 'User not found' })
 
-        await prisma.user.delete({ where: { id } })
+        await prisma.user.delete({ where: { id } }) 
         res.json({ message: 'User deleted successfully' })
     } catch (error) {
         res.status(500).json({ message: 'Error deleting user', error: error.message })

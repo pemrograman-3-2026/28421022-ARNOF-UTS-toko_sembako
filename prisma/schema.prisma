@@ -14,6 +14,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  USER 
   KASIR
 }
 
@@ -46,6 +47,7 @@ model barang {
   nama_barang String
   harga Int
   stok Int
+  image String?
   kategori_id Int
   kategori kategori @relation(fields: [kategori_id], references: [id])
   created_at DateTime @default(now())

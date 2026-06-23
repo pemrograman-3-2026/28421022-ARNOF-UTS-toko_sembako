@@ -3,25 +3,31 @@ import { prisma } from "../lib/prisma.js"
 export const getAllBarang = async (req, res) => {
     try {
         const barang = await prisma.barang.findMany({
-            include: {
-                kategori: true
-            }
-        })
+            include: { kategori: true }
+        });
+        
+        // Memastikan data yang dikirim ke frontend sudah bersih
+        const dataBarang = barang.map(item => ({
+            ...item,
+            image: item.image || "" // Jika null/undefined, jadikan string kosong
+        }));
+
         res.json({
             message: 'Berhasil mengambil semua barang',
-            data: barang
-        })
+            data: dataBarang
+        });
     } catch (error) {
         res.status(500).json({
             message: 'Terjadi kesalahan pada server',
             error: error.message
-        })
+        });
     }
 }
 
 export const createBarang = async (req, res) => {
     try {
         const { nama_barang, harga, stok, kategori_id } = req.body
+        const image = req.file ? req.file.filename : null 
 
         if (!nama_barang || harga === undefined || stok === undefined || !kategori_id) {
             return res.status(400).json({ message: 'Semua field (nama_barang, harga, stok, kategori_id) wajib diisi' })
@@ -32,7 +38,8 @@ export const createBarang = async (req, res) => {
                 nama_barang,
                 harga: parseInt(harga),
                 stok: parseInt(stok),
-                kategori_id: parseInt(kategori_id)
+                kategori_id: parseInt(kategori_id),
+                image 
             }
         })
 
@@ -52,6 +59,7 @@ export const updateBarang = async (req, res) => {
     try {
         const id = parseInt(req.params.id)
         const { nama_barang, harga, stok, kategori_id } = req.body
+        const image = req.file ? req.file.filename : undefined
 
         const existingBarang = await prisma.barang.findUnique({ where: { id } })
         if (!existingBarang) {
@@ -64,7 +72,8 @@ export const updateBarang = async (req, res) => {
                 nama_barang: nama_barang || existingBarang.nama_barang,
                 harga: harga !== undefined ? parseInt(harga) : existingBarang.harga,
                 stok: stok !== undefined ? parseInt(stok) : existingBarang.stok,
-                kategori_id: kategori_id !== undefined ? parseInt(kategori_id) : existingBarang.kategori_id
+                kategori_id: kategori_id !== undefined ? parseInt(kategori_id) : existingBarang.kategori_id,
+                image: image !== undefined ? image : existingBarang.image 
             }
         })
 
