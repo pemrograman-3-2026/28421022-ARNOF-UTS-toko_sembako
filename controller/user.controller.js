@@ -81,7 +81,7 @@ export const login = async (req, res) => {
         console.error("!!! SERVER CRASH SAAT LOGIN !!!");
         console.error("Pesan Error:", error.message);
         console.error("Detail Error:", error);
-        
+
         res.status(500).json({ message: 'Error logging in', error: error.message });
     }
 }
@@ -133,7 +133,7 @@ export const deleteUser = async (req, res) => {
         const existingUser = await prisma.user.findUnique({ where: { id } })
         if (!existingUser) return res.status(404).json({ message: 'User not found' })
 
-        await prisma.user.delete({ where: { id } }) 
+        await prisma.user.delete({ where: { id } })
         res.json({ message: 'User deleted successfully' })
     } catch (error) {
         res.status(500).json({ message: 'Error deleting user', error: error.message })
